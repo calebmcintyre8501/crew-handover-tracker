@@ -5,42 +5,58 @@ function UserSelect({
   handleSubmit,
 }) {
   return (
-    <main>
-      <h1>Crew Handover Tracker</h1>
+    <main className="login-screen">
+      <section className="login-panel">
+        <p className="app-eyebrow">
+          Operations Handover
+        </p>
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="user-select">
-          Select your user
-        </label>
+        <h1>Crew Handover Tracker</h1>
 
-        <select
-          id="user-select"
-          value={selectedUser}
-          onChange={(event) =>
-            setSelectedUser(event.target.value)
-          }
+        <p className="login-description">
+          Select your personnel profile to access the current crew handover.
+        </p>
+
+        <form
+          className="login-form"
+          onSubmit={handleSubmit}
         >
-          <option value="">
-            Select personnel
-          </option>
+          <div>
+            <label htmlFor="user-select">
+              Personnel
+            </label>
 
-          {personnel.map((person) => (
-            <option
-              key={person.id}
-              value={person.id}
+            <select
+              id="user-select"
+              value={selectedUser}
+              onChange={(event) =>
+                setSelectedUser(event.target.value)
+              }
             >
-              {person.rank} {person.name} - {person.role}
-            </option>
-          ))}
-        </select>
+              <option value="">
+                Select personnel
+              </option>
 
-        <button
-          type="submit"
-          disabled={!selectedUser}
-        >
-          Continue
-        </button>
-      </form>
+              {personnel.map((person) => (
+                <option
+                  key={person.id}
+                  value={person.id}
+                >
+                  {person.rank} {person.name} - {person.role}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="action-primary"
+            disabled={!selectedUser}
+          >
+            Continue
+          </button>
+        </form>
+      </section>
     </main>
   )
 }

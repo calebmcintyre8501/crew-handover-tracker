@@ -110,35 +110,43 @@ function App() {
   const handleSubmit = async (event) => {
     event.preventDefault()
 
-    const response = await fetch(
-      'http://localhost:8080/api/session/user',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          personnel_id: Number(selectedUser),
-        }),
+    try {
+      const response = await fetch(
+        'http://localhost:8080/api/session/user',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            personnel_id: Number(selectedUser),
+          }),
+        }
+      )
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setCurrentUserId(data.personnel_id)
       }
-    )
-
-    const data = await response.json()
-
-    if (response.ok) {
-      setCurrentUserId(data.personnel_id)
+    } catch (error) {
+      console.error(error)
     }
   }
 
   const handleChangeUser = async () => {
-    await fetch(
-      'http://localhost:8080/api/session/user',
-      {
-        method: 'DELETE',
-        credentials: 'include',
-      }
-    )
+    try {
+      await fetch(
+        'http://localhost:8080/api/session/user',
+        {
+          method: 'DELETE',
+          credentials: 'include',
+        }
+      )
+    } catch (error) {
+      console.error(error)
+    }
 
     setCurrentUserId(null)
     setSelectedUser('')
@@ -223,35 +231,52 @@ function App() {
 
   const handleSelectHandover = async (id) => {
     try {
-      const handoverResponse = await fetch(
-        `http://localhost:8080/api/handovers/${id}`
-      )
+      const [
+        handoverResponse,
+        updatesResponse,
+        acknowledgmentResponse,
+      ] = await Promise.all([
+        fetch(
+          `http://localhost:8080/api/handovers/${id}`
+        ),
+        fetch(
+          `http://localhost:8080/api/handovers/${id}/updates`
+        ),
+        fetch(
+          'http://localhost:8080/api/acknowledgments'
+        ),
+      ])
 
-      const updatesResponse = await fetch(
-        `http://localhost:8080/api/handovers/${id}/updates`
-      )
+      const handoverData =
+        await handoverResponse.json()
 
-      const acknowledgmentResponse = await fetch(
-        'http://localhost:8080/api/acknowledgments'
-      )
+      const updatesData =
+        await updatesResponse.json()
 
-      const handoverData = await handoverResponse.json()
-      const updatesData = await updatesResponse.json()
       const acknowledgmentData =
         await acknowledgmentResponse.json()
 
       if (!handoverResponse.ok) {
-        console.error(handoverData)
+        console.error(
+          'Handover error:',
+          handoverData
+        )
         return
       }
 
       if (!updatesResponse.ok) {
-        console.error(updatesData)
+        console.error(
+          'Updates error:',
+          updatesData
+        )
         return
       }
 
       if (!acknowledgmentResponse.ok) {
-        console.error(acknowledgmentData)
+        console.error(
+          'Acknowledgment error:',
+          acknowledgmentData
+        )
         return
       }
 
@@ -261,11 +286,18 @@ function App() {
       setAcknowledgments(
         acknowledgmentData.filter(
           (acknowledgment) =>
-            acknowledgment.handover_id === id
+            Number(
+              acknowledgment.handover_id
+            ) === Number(id)
         )
       )
+
+      setIsEditing(false)
     } catch (error) {
-      console.error(error)
+      console.error(
+        'View details failed:',
+        error
+      )
     }
   }
 
@@ -325,7 +357,10 @@ function App() {
         }
       )
 
-      if (response.ok || response.status === 409) {
+      if (
+        response.ok ||
+        response.status === 409
+      ) {
         await handleSelectHandover(
           selectedHandover.id
         )
@@ -365,6 +400,44 @@ function App() {
       setSelectedHandover(null)
       setUpdates([])
       setAcknowledgments([])
+      setUpdateMessage('')
+      setIsEditing(false)
+
+      await fetchHandovers()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleDeleteHandover = async () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to permanently delete this handover?'
+    )
+
+    if (!confirmed) {
+      return
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/handovers/${selectedHandover.id}`,
+        {
+          method: 'DELETE',
+        }
+      )
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        console.error(data)
+        return
+      }
+
+      setSelectedHandover(null)
+      setUpdates([])
+      setAcknowledgments([])
+      setUpdateMessage('')
+      setIsEditing(false)
 
       await fetchHandovers()
     } catch (error) {
@@ -375,7 +448,8 @@ function App() {
   const handleEditHandover = () => {
     setEditHandover({
       title: selectedHandover.title,
-      description: selectedHandover.description,
+      description:
+        selectedHandover.description,
       category: selectedHandover.category,
       priority: selectedHandover.priority,
       status: selectedHandover.status,
@@ -402,7 +476,10 @@ function App() {
 
     const changes = []
 
-    if (selectedHandover.title !== editHandover.title) {
+    if (
+      selectedHandover.title !==
+      editHandover.title
+    ) {
       changes.push(
         `Title: "${selectedHandover.title}" → "${editHandover.title}"`
       )
@@ -475,16 +552,22 @@ function App() {
       )
     }
 
-    const oldDueDate = selectedHandover.due_date
-      ? selectedHandover.due_date.slice(0, 10)
-      : ''
+    const oldDueDate =
+      selectedHandover.due_date
+        ? selectedHandover.due_date.slice(
+            0,
+            10
+          )
+        : ''
 
     const newDueDate =
       editHandover.due_date || ''
 
     if (oldDueDate !== newDueDate) {
       changes.push(
-        `Due Date: ${oldDueDate || 'None'} → ${
+        `Due Date: ${
+          oldDueDate || 'None'
+        } → ${
           newDueDate || 'None'
         }`
       )
@@ -500,11 +583,15 @@ function App() {
           },
           body: JSON.stringify({
             ...editHandover,
-            attention_for: editHandover.attention_for
-              ? Number(editHandover.attention_for)
-              : null,
+            attention_for:
+              editHandover.attention_for
+                ? Number(
+                    editHandover.attention_for
+                  )
+                : null,
             due_date:
-              editHandover.due_date || null,
+              editHandover.due_date ||
+              null,
           }),
         }
       )
@@ -522,13 +609,18 @@ function App() {
           {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type':
+                'application/json',
             },
             body: JSON.stringify({
-              handover_id: selectedHandover.id,
-              personnel_id: currentUserId,
+              handover_id:
+                selectedHandover.id,
+              personnel_id:
+                currentUserId,
               message:
-                `Edited handover:\n${changes.join('\n')}`,
+                `Edited handover:\n${changes.join(
+                  '\n'
+                )}`,
             }),
           }
         )
@@ -566,7 +658,8 @@ function App() {
   }
 
   const currentUser = personnel.find(
-    (person) => person.id === currentUserId
+    (person) =>
+      person.id === currentUserId
   )
 
   if (!currentUser) {
@@ -592,25 +685,44 @@ function App() {
           <EditHandoverForm
             editHandover={editHandover}
             personnel={personnel}
-            handleEditChange={handleEditChange}
-            handleSaveEdit={handleSaveEdit}
-            handleCancelEdit={handleCancelEdit}
+            handleEditChange={
+              handleEditChange
+            }
+            handleSaveEdit={
+              handleSaveEdit
+            }
+            handleCancelEdit={
+              handleCancelEdit
+            }
           />
         ) : (
           <HandoverDetails
             handover={selectedHandover}
             updates={updates}
-            acknowledgments={acknowledgments}
+            acknowledgments={
+              acknowledgments
+            }
             personnel={personnel}
-            updateMessage={updateMessage}
-            setUpdateMessage={setUpdateMessage}
-            handleAddUpdate={handleAddUpdate}
-            handleAcknowledge={handleAcknowledge}
+            updateMessage={
+              updateMessage
+            }
+            setUpdateMessage={
+              setUpdateMessage
+            }
+            handleAddUpdate={
+              handleAddUpdate
+            }
+            handleAcknowledge={
+              handleAcknowledge
+            }
             handleCloseHandover={
               handleCloseHandover
             }
             handleEditHandover={
               handleEditHandover
+            }
+            handleDeleteHandover={
+              handleDeleteHandover
             }
             handleBack={handleBack}
           />
@@ -633,7 +745,9 @@ function App() {
           <button
             type="button"
             onClick={() =>
-              setShowCreateForm((current) => !current)
+              setShowCreateForm(
+                (current) => !current
+              )
             }
           >
             {showCreateForm
@@ -657,12 +771,22 @@ function App() {
 
         <HandoverFilters
           priorityFilter={priorityFilter}
-          setPriorityFilter={setPriorityFilter}
-          categoryFilter={categoryFilter}
-          setCategoryFilter={setCategoryFilter}
+          setPriorityFilter={
+            setPriorityFilter
+          }
+          categoryFilter={
+            categoryFilter
+          }
+          setCategoryFilter={
+            setCategoryFilter
+          }
           statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          handleClearFilters={handleClearFilters}
+          setStatusFilter={
+            setStatusFilter
+          }
+          handleClearFilters={
+            handleClearFilters
+          }
         />
 
         <HandoverList

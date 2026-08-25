@@ -12,14 +12,17 @@ function HandoverDetails({
   handleAcknowledge,
   handleCloseHandover,
   handleEditHandover,
+  handleDeleteHandover,
   handleBack,
 }) {
   const creator = personnel.find(
-    (person) => person.id === handover.created_by
+    (person) =>
+      person.id === handover.created_by
   )
 
   const attentionFor = personnel.find(
-    (person) => person.id === handover.attention_for
+    (person) =>
+      person.id === handover.attention_for
   )
 
   return (
@@ -35,17 +38,29 @@ function HandoverDetails({
 
       <p>
         <strong>Category:</strong>{' '}
-        {handover.category}
+        <span
+          className={`badge category ${handover.category}`}
+        >
+          {handover.category.replaceAll('_', ' ')}
+        </span>
       </p>
 
       <p>
         <strong>Priority:</strong>{' '}
-        {handover.priority}
+        <span
+          className={`badge priority ${handover.priority}`}
+        >
+          {handover.priority}
+        </span>
       </p>
 
       <p>
         <strong>Status:</strong>{' '}
-        {handover.status}
+        <span
+          className={`badge status ${handover.status}`}
+        >
+          {handover.status.replaceAll('_', ' ')}
+        </span>
       </p>
 
       <p>
@@ -71,9 +86,10 @@ function HandoverDetails({
 
       <p>{handover.description}</p>
 
-      <div>
+      <div className="handover-actions">
         <button
           type="button"
+          className="action-primary"
           onClick={handleAcknowledge}
         >
           Acknowledge
@@ -89,43 +105,59 @@ function HandoverDetails({
         {handover.status !== 'closed' && (
           <button
             type="button"
+            className="action-warning"
             onClick={handleCloseHandover}
           >
             Close Handover
           </button>
         )}
+
+        <button
+          type="button"
+          className="action-danger"
+          onClick={handleDeleteHandover}
+        >
+          Delete Handover
+        </button>
       </div>
 
       <hr />
 
-      <h3>Update History</h3>
+      <div className="history-section">
+        <h3>Update History</h3>
 
-      {updates.length === 0 ? (
-        <p>No updates yet.</p>
-      ) : (
-        updates.map((update) => {
-          const person = personnel.find(
-            (item) =>
-              item.id === update.personnel_id
-          )
+        {updates.length === 0 ? (
+          <p className="empty-message">
+            No updates yet.
+          </p>
+        ) : (
+          <div className="history-list">
+            {updates.map((update) => {
+              const person = personnel.find(
+                (item) =>
+                  item.id === update.personnel_id
+              )
 
-          return (
-            <article key={update.id}>
-              <p>
-                <strong>
-                  {person
-                    ? `${person.rank} ${person.name}`
-                    : 'Unknown Personnel'}
-                </strong>
-              </p>
+              return (
+                <article
+                  className="history-entry"
+                  key={update.id}
+                >
+                  <div className="history-author">
+                    {person
+                      ? `${person.rank} ${person.name}`
+                      : 'Unknown Personnel'}
+                  </div>
 
-              <p style={{ whiteSpace: 'pre-line' }}>
-                {update.message}
-              </p>
-            </article>
-          )
-        })
-      )}
+                  <div className="history-message">
+                    {update.message}
+                  </div>
+                </article>
+              )
+            })}
+          </div>
+        )}
+      </div>
 
       <AddUpdateForm
         message={updateMessage}
@@ -133,10 +165,12 @@ function HandoverDetails({
         handleAddUpdate={handleAddUpdate}
       />
 
-      <AcknowledgmentList
-        acknowledgments={acknowledgments}
-        personnel={personnel}
-      />
+      <div className="acknowledgment-section">
+        <AcknowledgmentList
+          acknowledgments={acknowledgments}
+          personnel={personnel}
+        />
+      </div>
     </section>
   )
 }

@@ -3,15 +3,23 @@ function Header({
   handleChangeUser,
 }) {
   return (
-    <header>
+    <header className="app-header">
       <div>
-        <h1>Crew Handover Tracker</h1>
-
-        <p>
-          {currentUser.rank} {currentUser.name}
+        <p className="app-eyebrow">
+          Operations Handover
         </p>
 
-        <p>{currentUser.role}</p>
+        <h1>Crew Handover Tracker</h1>
+
+        <div className="current-user">
+          <span className="current-user-name">
+            {currentUser.rank} {currentUser.name}
+          </span>
+
+          <span className="current-user-role">
+            {currentUser.role}
+          </span>
+        </div>
       </div>
 
       <button

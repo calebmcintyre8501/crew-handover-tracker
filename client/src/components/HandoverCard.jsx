@@ -3,32 +3,44 @@ function HandoverCard({
   handleSelectHandover,
 }) {
   return (
-    <article>
+    <article
+      className={`handover-card priority-${handover.priority}`}
+    >
       <h3>{handover.title}</h3>
 
       <p>
         <strong>Category:</strong>{' '}
-        {handover.category}
+        <span
+          className={`badge category ${handover.category}`}
+        >
+          {handover.category.replaceAll('_', ' ')}
+        </span>
       </p>
 
       <p>
         <strong>Priority:</strong>{' '}
-        {handover.priority}
+        <span
+          className={`badge priority ${handover.priority}`}
+        >
+          {handover.priority}
+        </span>
       </p>
 
       <p>
         <strong>Status:</strong>{' '}
-        {handover.status}
+        <span
+          className={`badge status ${handover.status}`}
+        >
+          {handover.status.replaceAll('_', ' ')}
+        </span>
       </p>
 
       {handover.due_date && (
         <p>
-          <strong>Due:</strong>{' '}
+          <strong>Due Date:</strong>{' '}
           {handover.due_date}
         </p>
       )}
-
-      <p>{handover.description}</p>
 
       <button
         type="button"

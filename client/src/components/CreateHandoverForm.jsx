@@ -5,10 +5,13 @@ function CreateHandoverForm({
   handleCreateHandover,
 }) {
   return (
-    <form onSubmit={handleCreateHandover}>
+    <form
+      className="handover-form"
+      onSubmit={handleCreateHandover}
+    >
       <h3>New Handover</h3>
 
-      <div>
+      <div className="full-width">
         <label htmlFor="title">
           Title
         </label>
@@ -23,7 +26,7 @@ function CreateHandoverForm({
         />
       </div>
 
-      <div>
+      <div className="full-width">
         <label htmlFor="description">
           Description
         </label>
@@ -169,9 +172,14 @@ function CreateHandoverForm({
         />
       </div>
 
-      <button type="submit">
-        Save Handover
-      </button>
+      <div className="form-actions">
+        <button
+          type="submit"
+          className="action-primary"
+        >
+          Save Handover
+        </button>
+      </div>
     </form>
   )
 }

@@ -6,11 +6,17 @@ function EditHandoverForm({
   handleCancelEdit,
 }) {
   return (
-    <form onSubmit={handleSaveEdit}>
+    <form
+      className="handover-form"
+      onSubmit={handleSaveEdit}
+    >
       <h3>Edit Handover</h3>
 
-      <div>
-        <label htmlFor="edit-title">Title</label>
+      <div className="full-width">
+        <label htmlFor="edit-title">
+          Title
+        </label>
+
         <input
           id="edit-title"
           name="title"
@@ -20,8 +26,11 @@ function EditHandoverForm({
         />
       </div>
 
-      <div>
-        <label htmlFor="edit-description">Description</label>
+      <div className="full-width">
+        <label htmlFor="edit-description">
+          Description
+        </label>
+
         <textarea
           id="edit-description"
           name="description"
@@ -32,7 +41,10 @@ function EditHandoverForm({
       </div>
 
       <div>
-        <label htmlFor="edit-category">Category</label>
+        <label htmlFor="edit-category">
+          Category
+        </label>
+
         <select
           id="edit-category"
           name="category"
@@ -40,56 +52,106 @@ function EditHandoverForm({
           onChange={handleEditChange}
           required
         >
-          <option value="mission_issue">Mission Issue</option>
-          <option value="mission_note">Mission Note</option>
-          <option value="system_status">System Status</option>
-          <option value="personnel_note">Personnel Note</option>
-          <option value="training">Training</option>
-          <option value="priority_task">Priority Task</option>
-          <option value="general">General</option>
+          <option value="mission_issue">
+            Mission Issue
+          </option>
+
+          <option value="mission_note">
+            Mission Note
+          </option>
+
+          <option value="system_status">
+            System Status
+          </option>
+
+          <option value="personnel_note">
+            Personnel Note
+          </option>
+
+          <option value="training">
+            Training
+          </option>
+
+          <option value="priority_task">
+            Priority Task
+          </option>
+
+          <option value="general">
+            General
+          </option>
         </select>
       </div>
 
       <div>
-        <label htmlFor="edit-priority">Priority</label>
+        <label htmlFor="edit-priority">
+          Priority
+        </label>
+
         <select
           id="edit-priority"
           name="priority"
           value={editHandover.priority}
           onChange={handleEditChange}
         >
-          <option value="low">Low</option>
-          <option value="normal">Normal</option>
-          <option value="high">High</option>
+          <option value="low">
+            Low
+          </option>
+
+          <option value="normal">
+            Normal
+          </option>
+
+          <option value="high">
+            High
+          </option>
         </select>
       </div>
 
       <div>
-        <label htmlFor="edit-status">Status</label>
+        <label htmlFor="edit-status">
+          Status
+        </label>
+
         <select
           id="edit-status"
           name="status"
           value={editHandover.status}
           onChange={handleEditChange}
         >
-          <option value="open">Open</option>
-          <option value="in_progress">In Progress</option>
-          <option value="closed">Closed</option>
+          <option value="open">
+            Open
+          </option>
+
+          <option value="in_progress">
+            In Progress
+          </option>
+
+          <option value="closed">
+            Closed
+          </option>
         </select>
       </div>
 
       <div>
-        <label htmlFor="edit-attention">Attention For</label>
+        <label htmlFor="edit-attention">
+          Attention For
+        </label>
+
         <select
           id="edit-attention"
           name="attention_for"
           value={editHandover.attention_for || ''}
           onChange={handleEditChange}
         >
-          <option value="">Everyone</option>
+          <option value="">
+            Everyone
+          </option>
 
           {personnel.map((person) => (
-            <option key={person.id} value={person.id}>
+            <option
+              key={person.id}
+              value={person.id}
+            >
               {person.rank} {person.name}
             </option>
           ))}
@@ -97,7 +159,10 @@ function EditHandoverForm({
       </div>
 
       <div>
-        <label htmlFor="edit-due-date">Due Date</label>
+        <label htmlFor="edit-due-date">
+          Due Date
+        </label>
+
         <input
           id="edit-due-date"
           name="due_date"
@@ -111,14 +176,21 @@ function EditHandoverForm({
         />
       </div>
 
-      <button type="submit">Save Changes</button>
+      <div className="form-actions">
+        <button
+          type="submit"
+          className="action-primary"
+        >
+          Save Changes
+        </button>
 
-      <button
-        type="button"
-        onClick={handleCancelEdit}
-      >
-        Cancel
-      </button>
+        <button
+          type="button"
+          onClick={handleCancelEdit}
+        >
+          Cancel
+        </button>
+      </div>
     </form>
   )
 }
