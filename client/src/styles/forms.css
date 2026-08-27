@@ -12,7 +12,8 @@ form {
   background: var(--background-secondary);
 }
 
-form > div {
+form > div,
+.filter-group {
   display: grid;
   gap: 6px;
 }
@@ -37,19 +38,13 @@ form > div {
   background: var(--background-secondary);
 }
 
-.filter-group {
-  display: grid;
-  gap: 6px;
-}
-
 .filter-toolbar button {
   align-self: end;
 }
 
-/* Create/Edit forms */
+/* Create / Edit */
 
 .handover-form {
-  display: grid;
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
 
@@ -60,7 +55,8 @@ form > div {
 }
 
 .handover-form h3,
-.handover-form .full-width {
+.handover-form .full-width,
+.form-actions {
   grid-column: 1 / -1;
 }
 
@@ -75,35 +71,10 @@ form > div {
 .form-actions {
   display: flex;
   gap: 10px;
-
-  grid-column: 1 / -1;
 }
 
-/* Add update */
+/* Add Update */
 
 .history-section + form {
   margin-top: 22px;
-}
-
-/* Responsive */
-
-@media (max-width: 900px) {
-  .filter-toolbar,
-  .handover-form {
-    grid-template-columns: 1fr;
-  }
-
-  .handover-form .full-width,
-  .form-actions {
-    grid-column: auto;
-  }
-
-  .form-actions {
-    flex-direction: column;
-  }
-
-  .form-actions button,
-  .filter-toolbar button {
-    width: 100%;
-  }
 }

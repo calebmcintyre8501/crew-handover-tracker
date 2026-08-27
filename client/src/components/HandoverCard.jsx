@@ -4,7 +4,11 @@ function HandoverCard({
 }) {
   return (
     <article
-      className={`handover-card priority-${handover.priority}`}
+      className={
+        `handover-card ` +
+        `priority-${handover.priority} ` +
+        `status-${handover.status}`
+      }
     >
       <h3>{handover.title}</h3>
 
@@ -38,7 +42,7 @@ function HandoverCard({
       {handover.due_date && (
         <p>
           <strong>Due Date:</strong>{' '}
-          {handover.due_date}
+          {handover.due_date.slice(0, 10)}
         </p>
       )}
 

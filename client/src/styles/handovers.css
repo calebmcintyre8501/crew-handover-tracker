@@ -1,4 +1,4 @@
-/* Dashboard heading */
+/* Dashboard */
 
 section > div:first-child {
   display: flex;
@@ -6,11 +6,8 @@ section > div:first-child {
   justify-content: space-between;
 
   gap: 16px;
-
   margin-bottom: 20px;
 }
-
-/* Handover list */
 
 section > div:last-child {
   display: grid;
@@ -18,7 +15,6 @@ section > div:last-child {
     repeat(auto-fit, minmax(320px, 1fr));
 
   gap: 16px;
-
   width: 100%;
 }
 
@@ -32,6 +28,8 @@ section > div:last-child {
 
   border: 1px solid var(--border);
   border-left-width: 5px;
+  border-right-width: 5px;
+  border-right-style: solid;
   border-radius: var(--radius-medium);
 
   background: var(--surface-secondary);
@@ -52,7 +50,6 @@ section > div:last-child {
 
 .handover-card p {
   margin: 7px 0;
-
   color: var(--text-secondary);
 }
 
@@ -90,13 +87,38 @@ section > div:last-child {
   border-left-color: #8cbd99;
 }
 
+/* Status edge */
+
+.handover-card.status-open {
+  border-right-color: #4f86b5;
+}
+
+.handover-card.status-in_progress {
+  border-right-color: #c4a565;
+}
+
+.handover-card.status-closed {
+  border-right-color: #6f767d;
+}
+
+.handover-card.status-open:hover {
+  border-right-color: #6b9bc4;
+}
+
+.handover-card.status-in_progress:hover {
+  border-right-color: #d8ba78;
+}
+
+.handover-card.status-closed:hover {
+  border-right-color: #8a9198;
+}
+
 /* Badges */
 
 .badge {
   display: inline-block;
 
   padding: 3px 8px;
-
   border-radius: 999px;
 
   font-size: 0.78rem;
@@ -188,7 +210,6 @@ section > h2 {
 
 section > p {
   margin: 8px 0;
-
   color: var(--text-secondary);
 }
 
@@ -204,7 +225,6 @@ section > p strong {
   flex-wrap: wrap;
 
   gap: 8px;
-
   margin-top: 22px;
 }
 
@@ -328,35 +348,4 @@ section > p strong {
 
   font-size: 0.82rem;
   font-weight: 600;
-}
-
-/* Responsive */
-
-@media (max-width: 900px) {
-  section > div:first-child {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  section > div:last-child {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 700px) {
-  .handover-actions {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .handover-actions button {
-    width: 100%;
-  }
-}
-
-@media (min-width: 1800px) {
-  section > div:last-child {
-    grid-template-columns:
-      repeat(auto-fit, minmax(360px, 1fr));
-  }
 }

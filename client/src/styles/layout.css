@@ -28,7 +28,7 @@ section {
   margin-bottom: 24px;
   padding: 20px 24px;
 
-  overflow: hidden;
+  overflow: visible;
 
   border: 1px solid var(--border);
   border-radius: var(--radius-large);
@@ -81,6 +81,40 @@ section {
   margin-right: 10px;
 
   color: var(--text-muted);
+}
+
+/* Header actions */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Live indicator */
+
+.live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  color: var(--text-secondary);
+
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: var(--success);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(120, 167, 134, 0.14);
 }
 
 /* Login */
@@ -146,6 +180,14 @@ section {
   .app-header button {
     width: 100%;
   }
+
+  .header-actions {
+    width: 100%;
+  }
+
+  .header-actions > button:last-child {
+    flex: 1;
+  }
 }
 
 @media (max-width: 700px) {
@@ -169,4 +211,9 @@ section {
     padding-right: 48px;
     padding-left: 48px;
   }
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 10px;
 }

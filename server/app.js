@@ -7,6 +7,9 @@ const personnelRoutes = require('./routes/personnel')
 const updateRoutes = require('./routes/updates')
 const acknowledgmentRoutes = require('./routes/acknowledgments')
 const sessionRoutes = require('./routes/session')
+const notificationRoutes = require('./routes/notifications')
+const analyticsRoutes =
+  require('./routes/analytics')
 
 const app = express()
 
@@ -26,5 +29,10 @@ app.use('/api/personnel', personnelRoutes)
 app.use('/api/updates', updateRoutes)
 app.use('/api/acknowledgments', acknowledgmentRoutes)
 app.use('/api/session', sessionRoutes)
+app.use('/api/notifications', notificationRoutes)
+app.use(
+  '/api/analytics',
+  analyticsRoutes
+)
 
 module.exports = app

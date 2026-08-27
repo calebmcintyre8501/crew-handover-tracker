@@ -1,6 +1,14 @@
+import NotificationBell from './NotificationBell'
+
 function Header({
   currentUser,
   handleChangeUser,
+  notifications,
+  showNotifications,
+  setShowNotifications,
+  handleMarkNotificationRead,
+  handleMarkAllRead,
+  handleClearRead,
 }) {
   return (
     <header className="app-header">
@@ -19,15 +27,33 @@ function Header({
           <span className="current-user-role">
             {currentUser.role}
           </span>
+
+          <div className="live-indicator">
+            <span className="live-dot"></span>
+            Live
+          </div>
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={handleChangeUser}
-      >
-        Change User
-      </button>
+      <div className="header-actions">
+        <NotificationBell
+          notifications={notifications}
+          showNotifications={showNotifications}
+          setShowNotifications={setShowNotifications}
+          handleMarkNotificationRead={
+            handleMarkNotificationRead
+          }
+          handleMarkAllRead={handleMarkAllRead}
+          handleClearRead={handleClearRead}
+        />
+
+        <button
+          type="button"
+          onClick={handleChangeUser}
+        >
+          Change User
+        </button>
+      </div>
     </header>
   )
 }
